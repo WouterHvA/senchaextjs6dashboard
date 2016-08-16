@@ -19,8 +19,8 @@ Ext.define('Admin.view.dashboard.Dashboard', {
 
     items: [
      {
-            xtype: 'earnings',
-            userCls: 'big-20 small-50'
+            // xtype: 'earnings',
+            // userCls: 'big-20 small-50'
         }
     ]
 });
