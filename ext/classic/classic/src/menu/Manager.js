@@ -41,9 +41,9 @@ Ext.define('Ext.menu.Manager', {
             i, menu,
             scrollerEl = scroller.getElement();
 
-        // Scrolling document should not hide menus.
-        // The will move along with the document.
-        if (len && scroller !== Ext.scroll.DomScroller.document) {
+        // Scrolling document body in touchScroll==2 mode means the popup keyboard has shown
+        // Do not hide for this.
+        if (len && !(Ext.supports.touchScroll === 2 && scroller !== Ext.scroll.Scroller.document)) {
             // Clone here, we may modify this collection while the loop is active
             allMenus = allMenus.slice();
             for (i = 0; i < len; ++i) {

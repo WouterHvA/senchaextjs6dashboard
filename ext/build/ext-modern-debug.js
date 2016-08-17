@@ -1,17 +1,19 @@
 /*
-This file is part of Ext JS 6.0.2.437
+This file is part of Ext JS 6.0.2.409
 
 Copyright (c) 2011-2016 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
-This version of Sencha Ext JS is licensed commercially for a limited period for evaluation 
-purposes only. Production use or use beyond the applicable evaluation period is prohibited 
-under this license.
+Pre-release code in the Ext repository is intended for development purposes only and will
+not always be stable. 
 
-If your trial has expired, please contact the sales department at http://www.sencha.com/contact.
+Use of pre-release code is permitted with your application at your own risk under standard
+Ext license terms. Public redistribution is prohibited.
 
-Version: 6.0.2.437 Build date: 2016-03-25 13:53:38 (4552fe90c6c396d8cdd24a3bc21561b7254db715)
+For early licensing, please contact us at licensing@sencha.com
+
+Version: 6.0.2.409 Build date: 2016-03-12 02:44:41 (84cc9899b433d6e91d1caaf6e8ecf400eb9f71ea)
 
 */
 // @tag core
@@ -6416,8 +6418,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '6.0.2.437');
-        Ext.setVersion('core', '6.0.2.437');
+        Ext.setVersion('ext', '6.0.2.409');
+        Ext.setVersion('core', '6.0.2.409');
     }
 })(Ext.manifest);
 
@@ -24965,10 +24967,7 @@ Ext.define('Ext.dom.Element', function(Element) {
         
         (!dom.parentNode || 
         
-        
-        
-        
-        (dom.offsetParent === null && 
+        (!dom.offsetParent && 
         
         
         
@@ -43975,7 +43974,21 @@ Ext.define('Ext.scroll.Scroller', {
     },
     
     isInView: function(el) {
-        return this.doIsInView(el);
+        var me = this,
+            result = {
+                x: false,
+                y: false
+            },
+            elRegion,
+            myEl = me.getElement(),
+            myElRegion;
+        if (el && (myEl.contains(el) || (me.component && me.component.owns(el)))) {
+            myElRegion = myEl.getRegion();
+            elRegion = Ext.fly(el).getRegion();
+            result.x = elRegion.right > myElRegion.left && elRegion.left < myElRegion.right;
+            result.y = elRegion.bottom > myElRegion.top && elRegion.top < myElRegion.bottom;
+        }
+        return result;
     },
     
     scrollTo: function(x, y, animate) {
@@ -44149,24 +44162,6 @@ Ext.define('Ext.scroll.Scroller', {
             if (shortfall > 0) {
                 sStyle.marginTop = Math.min(shortfall, this.maxSpacerMargin || 0) + 'px';
             }
-        },
-        doIsInView: function(el, skipCheck) {
-            var me = this,
-                c = me.component,
-                result = {
-                    x: false,
-                    y: false
-                },
-                elRegion,
-                myEl = me.getElement(),
-                myElRegion;
-            if (el && (skipCheck || (myEl.contains(el) || (c && c.owns(el))))) {
-                myElRegion = myEl.getRegion();
-                elRegion = Ext.fly(el).getRegion();
-                result.x = elRegion.right > myElRegion.left && elRegion.left < myElRegion.right;
-                result.y = elRegion.bottom > myElRegion.top && elRegion.top < myElRegion.bottom;
-            }
-            return result;
         },
         constrainScrollRange: function(scrollRange) {
             
@@ -44444,7 +44439,6 @@ Ext.define('Ext.scroll.Scroller', {
                     }, 50);
                     dom.scrollTop = me.trackingScrollTop;
                     dom.scrollLeft = me.trackingScrollLeft;
-                    me.trackingScrollLeft = me.trackingScrollTop = undefined;
                 }
             }
         }

@@ -467,7 +467,7 @@ Ext.define('Ext.chart.series.Gauge', {
             zIndex: 10
         }, true);
         sprite.setRendererData(rendererData);
-        sprite.setRendererIndex(spriteIndex++);
+        sprite.rendererIndex = spriteIndex++;
         lineWidths.push(me.getNeedleWidth());
 
         // Create background sprite(s)
@@ -486,7 +486,7 @@ Ext.define('Ext.chart.series.Gauge', {
             Ext.apply(attr, sectors[i].style);
             sprite = me.createSprite();
             sprite.setRendererData(rendererData);
-            sprite.setRendererIndex(spriteIndex++);
+            sprite.rendererIndex = spriteIndex++;
             sprite.setAttributes(attr, true);
             lineWidths.push(attr.lineWidth);
         }

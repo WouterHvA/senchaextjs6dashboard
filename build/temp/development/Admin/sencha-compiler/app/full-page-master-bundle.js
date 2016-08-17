@@ -1,2 +1,2 @@
 // @tag full-page
-// @require /Users/wouter/admin-dashboard/app.js
+// @require /Applications/XAMPP/xamppfiles/htdocs/senchaextjs6dashboard/app.js

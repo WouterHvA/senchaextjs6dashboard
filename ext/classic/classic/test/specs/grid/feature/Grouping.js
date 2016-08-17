@@ -2446,50 +2446,5 @@ describe('Ext.grid.feature.Grouping', function () {
             completeWithData(data);
         });
     });
-    
-    describe("move column with filters", function() {
-        // Pass a reference to the cmp not an index!
-        function dragColumn(from, to, onRight) {
-            var fromBox = from.el.getBox(),
-                fromMx = fromBox.x + fromBox.width/2,
-                fromMy = fromBox.y + fromBox.height/2,
-                toBox = to.el.getBox(),
-                toMx = toBox.x,
-                toMy = toBox.y + toBox.height/2,
-                offset = onRight ? toBox.width - 6 : 5,
-                moveOffset = toMx + offset,
-                dragThresh = onRight ? Ext.dd.DragDropManager.clickPixelThresh + 1 : -Ext.dd.DragDropManager.clickPixelThresh - 1;
-
-            // Mousedown on the header to drag
-            jasmine.fireMouseEvent(from.el.dom, 'mouseover', fromMx, fromMy);
-            jasmine.fireMouseEvent(from.titleEl.dom, 'mousedown', fromMx, fromMy);
-
-            // The initial move which tiggers the start of the drag
-            jasmine.fireMouseEvent(from.el.dom, 'mousemove', fromMx + dragThresh, fromMy);
-
-            // The move to left of the centre of the target element
-            jasmine.fireMouseEvent(to.el.dom, 'mousemove', moveOffset, toMy);
-
-            // Drop to left of centre of target element
-            jasmine.fireMouseEvent(to.el.dom, 'mouseup', moveOffset, toMy);
-        }
-
-        it("should allow column drag/drop with filters enabled", function() {
-            makeGrid({
-                data: [
-                    { name: 'Sulla', cuisine: 'Roman'},
-                    { name: 'Sulla2', cuisine: 'Roman'},
-                    { name: 'Pericles', cuisine: 'Greek'}
-                ],
-                groupField: 'cuisine'
-            });
-            grid.getStore().filter('name', 'Sulla');
-            var name = grid.down('[text=Name]'),
-                cuisine = grid.down('[text=Cuisine]');
-            
-            dragColumn(name, cuisine, true);
-        });
-    });
-      
 });
 

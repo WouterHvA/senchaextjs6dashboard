@@ -298,12 +298,11 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
         ]);
 
         Ext.applyIf(config, {
+            text: component.overflowText || component.text,
             hideOnClick: hideOnClick,
             destroyMenu: false,
             listeners: null
         });
-
-        config.text = component.overflowText || component.text;
         config.masterComponent = component;
 
         // Clone must have same value, and must sync original's value on change

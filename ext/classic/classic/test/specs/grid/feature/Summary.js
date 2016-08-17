@@ -43,13 +43,6 @@ describe('Ext.grid.feature.Summary', function () {
                     ftype: 'summary'
                 }, summaryCfg));
 
-                gridCfg = gridCfg || {};
-                if (gridCfg.features) {
-                    gridCfg.features.push(summary);
-                } else {
-                    gridCfg.features = summary;
-                }
-
                 grid = new Ext.grid.Panel(Ext.apply({
                     store: store,
                     columns: [{
@@ -73,6 +66,7 @@ describe('Ext.grid.feature.Summary', function () {
                     }],
                     width: 600,
                     height: 300,
+                    features: summary,
                     renderTo: Ext.getBody()
                 }, gridCfg));
 
@@ -838,19 +832,6 @@ describe('Ext.grid.feature.Summary', function () {
                         expect(theView.getEl().down(selector)).not.toBeNull();
                     });
                 });
-            });
-
-            describe("summary types", function() {
-                describe("count", function() {
-                    it("should be able to provide the correct value when using grouping", function() {
-                        createGrid({
-                            features: [{ftype: 'grouping'}]
-                        }, null, {
-                            groupField: 'subject'
-                        });
-                        expect(getSummaryContent()).toBe('4students80');
-                    });
-                })
             });
         });
     }

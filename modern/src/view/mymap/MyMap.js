@@ -6,6 +6,9 @@ Ext.define('Admin.view.mymap.MyMap', {
         'Admin.view.mymap.MyMapModel'
     ],
 
+
+    alias: 'widget.mymap',
+
     controller: 'mymap',
     viewModel: 'mymap',
 

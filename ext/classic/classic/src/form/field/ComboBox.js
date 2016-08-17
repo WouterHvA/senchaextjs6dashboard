@@ -2135,7 +2135,7 @@ Ext.define('Ext.form.field.ComboBox', {
         me.setRawValue(displayValue);
         me.checkChange();
 
-        if (inputEl && me.typeAhead && me.hasFocus) {
+        if (inputEl && me.typeAhead) {
             // if typeahead is configured, deselect any partials
             me.selectText(displayValue.length);
         }

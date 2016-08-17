@@ -1,17 +1,19 @@
 /*
-This file is part of Ext JS 6.0.2.437
+This file is part of Ext JS 6.0.2.409
 
 Copyright (c) 2011-2016 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
-This version of Sencha Ext JS is licensed commercially for a limited period for evaluation 
-purposes only. Production use or use beyond the applicable evaluation period is prohibited 
-under this license.
+Pre-release code in the Ext repository is intended for development purposes only and will
+not always be stable. 
 
-If your trial has expired, please contact the sales department at http://www.sencha.com/contact.
+Use of pre-release code is permitted with your application at your own risk under standard
+Ext license terms. Public redistribution is prohibited.
 
-Version: 6.0.2.437 Build date: 2016-03-25 13:53:38 (4552fe90c6c396d8cdd24a3bc21561b7254db715)
+For early licensing, please contact us at licensing@sencha.com
+
+Version: 6.0.2.409 Build date: 2016-03-12 02:44:41 (84cc9899b433d6e91d1caaf6e8ecf400eb9f71ea)
 
 */
 
@@ -3336,7 +3338,7 @@ var Ext = Ext || {};
       "requires": [],
       "uses": [
         20,
-        109,
+        93,
         119,
         519
       ],
@@ -10268,7 +10270,7 @@ var Ext = Ext || {};
         "classic"
       ],
       "type": "toolkit",
-      "version": "6.0.2.437"
+      "version": "6.0.2.409"
     },
     "cmd": {
       "version": "6.0.3.46"
@@ -10282,14 +10284,14 @@ var Ext = Ext || {};
         "ext"
       ],
       "type": "code",
-      "version": "6.0.2.437"
+      "version": "6.0.2.409"
     },
     "ext": {
       "build": {
         "dir": "${package.output.base}"
       },
       "creator": "Sencha",
-      "license": "trial",
+      "license": "dev",
       "namespace": "Ext",
       "requires": [],
       "resource": {
@@ -10298,7 +10300,7 @@ var Ext = Ext || {};
         ]
       },
       "type": "framework",
-      "version": "6.0.2.437"
+      "version": "6.0.2.409"
     }
   },
   "bootRelative": true
@@ -20362,8 +20364,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '6.0.2.437');
-        Ext.setVersion('core', '6.0.2.437');
+        Ext.setVersion('ext', '6.0.2.409');
+        Ext.setVersion('core', '6.0.2.409');
     }
 })(Ext.manifest);
 

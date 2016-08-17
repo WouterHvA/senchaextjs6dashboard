@@ -447,9 +447,7 @@ Ext.define('Ext.util.FocusableContainer', {
             // untestable by our unit tests: injecting mousedown events will not cause
             // default action in the browser, the element never gets focus and tests
             // never fail. See http://www.w3.org/TR/DOM-Level-3-Events/#trusted-events
-            // Must also check for mousedowns outside the focusable element
-            // but still within the child component. (EXTJS-20297)
-            if (targetCmp === this || !targetCmp.getFocusEl().contains(target)) {
+            if (targetCmp === this) {
                 e.preventDefault();
             }
         },

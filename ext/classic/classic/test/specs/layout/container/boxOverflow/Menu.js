@@ -153,30 +153,6 @@ describe('Ext.layout.container.boxOverflow.Menu', function () {
 
             expect(wasClicked).toBe(true);
         });
-
-        it('should apply overflowText if defined', function () {
-            var overflowHandler, menuItems;
-
-            createToolbar({
-                items: [{
-                    text: 'Item One'
-                }, {
-                    text: 'Item Two',
-                    overflowText: 'Two'
-                },{
-                    overflowText: 'Three'
-                }]
-            });
-
-            overflowHandler = toolbar.layout.overflowHandler;
-            menuItems = overflowHandler.menu.items;
-
-            overflowHandler.menu.show();
-
-            expect(menuItems.getAt(0).text).toBe('Item One');
-            expect(menuItems.getAt(1).text).toBe('Two');
-            expect(menuItems.getAt(2).text).toBe('Three');
-        });
     });
 
     describe('form fields in toolbar', function() {

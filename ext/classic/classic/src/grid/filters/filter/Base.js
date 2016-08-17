@@ -122,28 +122,7 @@ Ext.define('Ext.grid.filters.filter.Base', {
     },
 
     addStoreFilter: function (filter) {
-        var filters = this.getGridStore().getFilters(),
-        idx = filters.indexOf(filter),
-        existing = idx !== -1 ? filters.getAt(idx) : null,
-        sameValue;
-
-        // If the filter being added doesn't exist in the collection we should add it.
-        // But if there is a filter with the same id (indexOf tests for the same id), we should
-        // check if the value and property are the same and if they are not, the filter should be
-        // added to replace the older one.
-        if (!existing) {
-            filters.add(filter);
-        } else {
-            if (existing.getValue() === filter.getValue()) {
-                sameValue = true;
-            } else if (Ext.isArray(filter.getValue()) && Ext.Array.equals(existing.getValue(), filter.getValue())) {
-                sameValue = true;
-            }
-
-            if (!(sameValue && existing.getProperty() === filter.getProperty())) {
-                filters.add(filter);
-            }
-        }
+        this.getGridStore().getFilters().add(filter);
     },
 
     createFilter: function (config, key) {

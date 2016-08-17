@@ -623,7 +623,23 @@ Ext.define('Ext.scroll.Scroller', {
      * @return {Boolean} return.y `true` if the passed element is within the y visible range.
      */
     isInView: function(el) {
-        return this.doIsInView(el);
+        var me = this,
+            result = {
+                x: false,
+                y: false
+            },
+            elRegion,
+            myEl = me.getElement(),
+            myElRegion;
+
+        if (el && (myEl.contains(el) || (me.component && me.component.owns(el)))) {
+            myElRegion = myEl.getRegion();
+            elRegion = Ext.fly(el).getRegion();
+
+            result.x = elRegion.right > myElRegion.left && elRegion.left < myElRegion.right;
+            result.y = elRegion.bottom > myElRegion.top && elRegion.top < myElRegion.bottom;
+        }
+        return result;
     },
 
     /**
@@ -882,27 +898,6 @@ Ext.define('Ext.scroll.Scroller', {
             if (shortfall > 0) {
                 sStyle.marginTop = Math.min(shortfall, this.maxSpacerMargin || 0) + 'px';
             }
-        },
-
-        doIsInView: function(el, skipCheck) {
-            var me = this,
-                c = me.component,
-                result = {
-                    x: false,
-                    y: false
-                },
-                elRegion,
-                myEl = me.getElement(),
-                myElRegion;
-
-            if (el && (skipCheck || (myEl.contains(el) || (c && c.owns(el))))) {
-                myElRegion = myEl.getRegion();
-                elRegion = Ext.fly(el).getRegion();
-
-                result.x = elRegion.right > myElRegion.left && elRegion.left < myElRegion.right;
-                result.y = elRegion.bottom > myElRegion.top && elRegion.top < myElRegion.bottom;
-            }
-            return result;
         },
 
         constrainScrollRange: function(scrollRange) {
@@ -1249,8 +1244,6 @@ Ext.define('Ext.scroll.Scroller', {
                     }, 50);
                     dom.scrollTop = me.trackingScrollTop;
                     dom.scrollLeft = me.trackingScrollLeft;
-
-                    me.trackingScrollLeft = me.trackingScrollTop = undefined;
                 }
             }
         }
