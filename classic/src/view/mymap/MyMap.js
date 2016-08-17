@@ -1,5 +1,5 @@
 Ext.define('Admin.view.mymap.MyMap', {
-    extend: 'Ext.panel.Panel',
+    extend: 'Shared.view.Map',
 
     requires: [
         'Admin.view.mymap.MyMapController',
@@ -8,9 +8,12 @@ Ext.define('Admin.view.mymap.MyMap', {
 
     alias: 'widget.mymap',
 
-
     controller: 'mymap',
     viewModel: 'mymap',
 
-    html: 'map here'
+    bind: {
+        location: '{location}'
+        //store: '{}', //marker store
+        //selection: '{}' //marker selection
+    }
 });
