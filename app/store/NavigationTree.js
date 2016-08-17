@@ -19,6 +19,12 @@ Ext.define('Admin.store.NavigationTree', {
                 leaf: true
             },
             {
+                text: 'Map',
+                iconCls: 'x-fa fa-map',
+                viewType: 'mymap',
+                leaf: true
+            },
+            {
                 text: 'Users',
                 iconCls: 'x-fa fa-leanpub',
                 expanded: false,
