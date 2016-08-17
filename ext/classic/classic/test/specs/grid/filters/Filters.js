@@ -764,42 +764,6 @@ describe("Ext.grid.filters.Filters", function () {
                     });
                 });
 
-                it("should not load the store again when expanding the headerCt menu", function() {
-                    var spy = jasmine.createSpy();
-
-                    createGrid({
-                        remoteFilter: true,
-                        autoLoad: true,
-                        data: null,
-                        proxy: {
-                            type: 'ajax',
-                            url: '/grid/filters/Feature/remoteFiltering'
-                        }
-                    }, {
-                        columns: [
-                            { header: 'Name',  dataIndex: 'name', width: 100,
-                                filter: {
-                                    type: 'list',
-                                    options: [
-                                        ['Jimmy Page', 'John Scofield', 'Robben Ford', 'Alex Lifeson']
-                                    ],
-                                    value: 'Robben Ford'
-                                }
-                            },
-                            { header: 'Email', dataIndex: 'email', width: 100 },
-                            { header: 'Phone', dataIndex: 'phone', width: 100
-                            }
-                        ]
-                    });
-                    completeWithData();
-                    store.on('load', spy);
-                    jasmine.fireMouseEvent(grid.columnManager.getColumns()[0].triggerEl.dom, 'click');
-                    completeWithData();
-                    
-                    expect(spy.callCount).toBe(0);
-                    expect(store.filters.length).toBe(1);
-                });
-
                 it("should send filter data in the params for any active filter", function () {
                     // Note that it ignores the store config in favor of the default panel config.
                     createGrid({
@@ -877,6 +841,46 @@ describe("Ext.grid.filters.Filters", function () {
                     runs(function () {
                         expect(getFilters()).not.toBeDefined();
                     });
+                });
+            });
+
+            // See EXTJS-15348.
+            describe("if false", function() {
+                it("should not cause the store to load", function () {
+                    var proto = Ext.data.ProxyStore.prototype;
+
+                    spyOn(proto, 'flushLoad').andCallThrough();
+
+                    createGrid({
+                        remoteFilter: true,
+                        autoLoad: false,
+                        data: null,
+                        proxy: {
+                            type: 'ajax',
+                            url: '/grid/filters/Feature/remoteFiltering'
+                        }
+                    }, {
+                        columns: [
+                            { header: 'Name',  dataIndex: 'name', width: 100,
+                                filter: {
+                                    type: 'string',
+                                    value: 'stevie ray'
+                                }
+                            },
+                            { header: 'Email', dataIndex: 'email', width: 100 },
+                            { header: 'Phone', dataIndex: 'phone', width: 100,
+                                filter: {
+                                    type: 'string'
+                                }
+                            }
+                        ]
+                    });
+
+                    // Store must now have a pending load. It's going
+                    // to load at the next tick. The autoLoad, and the addition
+                    // of the filter both required a load be scheduled.
+                    expect(store.hasPendingLoad()).toBe(true);
+                    expect(proto.flushLoad).not.toHaveBeenCalled();
                 });
             });
 
@@ -1026,43 +1030,6 @@ describe("Ext.grid.filters.Filters", function () {
         });
 
         describe("no autoLoad", function () {
-            // See EXTJS-15348.
-            it("should not cause the store to load", function () {
-                var proto = Ext.data.ProxyStore.prototype;
-
-                spyOn(proto, 'flushLoad').andCallThrough();
-
-                createGrid({
-                    remoteFilter: true,
-                    autoLoad: false,
-                    data: null,
-                    proxy: {
-                        type: 'ajax',
-                        url: '/grid/filters/Feature/remoteFiltering'
-                    }
-                }, {
-                    columns: [
-                        { header: 'Name',  dataIndex: 'name', width: 100,
-                            filter: {
-                                type: 'string',
-                                value: 'stevie ray'
-                            }
-                        },
-                        { header: 'Email', dataIndex: 'email', width: 100 },
-                        { header: 'Phone', dataIndex: 'phone', width: 100,
-                            filter: {
-                                type: 'string'
-                            }
-                        }
-                    ]
-                });
-
-                // Store must now have a pending load. It's going
-                // to load at the next tick. The autoLoad, and the addition
-                // of the filter both required a load be scheduled.
-                expect(store.hasPendingLoad()).toBe(true);
-                expect(proto.flushLoad).not.toHaveBeenCalled();
-            });
             // Note that for all specs it ignores the store config in favor of the default panel config.
             it("should not send multiple requests", function () {
                 createGrid({
@@ -1690,7 +1657,7 @@ describe("Ext.grid.filters.Filters", function () {
                     text: 'DOB',
                     filter: {
                         value: {
-                            eq: new Date('8/8/1992')
+                            on: new Date('8/8/1992')
                         }
                     }
                 });
@@ -1707,7 +1674,7 @@ describe("Ext.grid.filters.Filters", function () {
                     filter: {
                         type: 'date',
                         value: {
-                            eq: new Date('8/8/1992')
+                            on: new Date('8/8/1992')
                         }
                     }
                 });
@@ -1723,7 +1690,7 @@ describe("Ext.grid.filters.Filters", function () {
                     text: 'DOB',
                     filter: {
                         value: {
-                            eq: new Date('8/8/1992')
+                            on: new Date('8/8/1992')
                         }
                     }
                 });
@@ -2692,6 +2659,8 @@ describe("Ext.grid.filters.Filters", function () {
 
         describe("initialization", function () {
             it("should not save state information for any initialized active filters", function () {
+                var state;
+
                 createGrid({}, {
                     columns: [
                         { header: 'Name',  dataIndex: 'name', width: 100,
@@ -2948,7 +2917,7 @@ describe("Ext.grid.filters.Filters", function () {
                         filter: {
                             type: 'date',
                             value: {
-                                lt: new Date('8/8/1992')
+                                before: new Date('8/8/1992')
                             }
                         }
                     }
@@ -3005,15 +2974,15 @@ describe("Ext.grid.filters.Filters", function () {
                     { header: 'Email',  dataIndex: 'email', width: 100 }
                 ]
             });
+
+            jasmine.fireMouseEvent(grid.columnManager.getColumns()[0].triggerEl.dom, 'click');
         });
 
         it("should create the 'Filters' menuItem", function () {
-            jasmine.fireMouseEvent(grid.columnManager.getColumns()[0].triggerEl.dom, 'click');
             expect(grid.headerCt.menu.items.getByKey('filters')).toBeDefined();
         });
 
         it("should create the column filter menu", function () {
-            jasmine.fireMouseEvent(grid.columnManager.getColumns()[0].triggerEl.dom, 'click');
             expect(grid.headerCt.menu.items.getByKey('filters').menu).toBeDefined();
         });
     });

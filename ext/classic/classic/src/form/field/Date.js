@@ -511,6 +511,7 @@ Ext.define('Ext.form.field.Date', {
     setValue: function(v) {
         var me = this;
 
+        me.callParent(arguments);
         if (Ext.isDate(v)) {
             me.rawDate  = v;
             me.rawDateText = me.formatDate(v);
@@ -523,7 +524,6 @@ Ext.define('Ext.form.field.Date', {
                 me.rawDateText = '';
             }
         }
-        me.callParent(arguments);
     },
 
     /**

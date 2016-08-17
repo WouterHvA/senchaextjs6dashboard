@@ -632,20 +632,18 @@ Ext.define('Ext.grid.feature.Grouping', {
 
             for (groupName in groupNames) {
                 group = me.getGroup(groupName);
-                if (group) {
-                    firstRec = group.first();
-                    lastRec = group.last();
+                firstRec = group.first();
+                lastRec = group.last();
 
-                    metaGroup = me.getMetaGroup(groupName);
+                metaGroup = me.getMetaGroup(groupName);
 
-                    if (metaGroup.isCollapsed) {
-                        firstRec = lastRec = me.dataSource.getGroupPlaceholder(groupName);
-                    }
+                if (metaGroup.isCollapsed) {
+                    firstRec = lastRec = me.dataSource.getGroupPlaceholder(groupName);
+                }
 
-                    view.refreshNode(firstRec);
-                    if (me.showSummaryRow && lastRec !== firstRec) {
-                        view.refreshNode(lastRec);
-                    }
+                view.refreshNode(firstRec);
+                if (me.showSummaryRow && lastRec !== firstRec) {
+                    view.refreshNode(lastRec);
                 }
             }
 
@@ -901,7 +899,7 @@ Ext.define('Ext.grid.feature.Grouping', {
         // We do not need to inform our lockingPartner.
         // It shares the same group cache - it will have the same set of expanded groups.
         Ext.suspendLayouts();
-        me.dataSource.onDataChanged();
+        me.dataSource.onRefresh();
         Ext.resumeLayouts(true);
 
         // Fire event for all groups post expand
@@ -988,7 +986,7 @@ Ext.define('Ext.grid.feature.Grouping', {
         // We do not need to inform our lockingPartner.
         // It shares the same group cache - it will have the same set of collapsed groups.
         Ext.suspendLayouts();
-        me.dataSource.onDataChanged();
+        me.dataSource.onRefresh();
         Ext.resumeLayouts(true);
 
         // Fire event for all groups post collapse

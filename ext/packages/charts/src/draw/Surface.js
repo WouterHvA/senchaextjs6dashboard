@@ -374,7 +374,7 @@ Ext.define('Ext.draw.Surface', {
      */
     remove: function (sprite, isDestroy) {
         var me = this,
-            destroying = me.clearing,
+            destroying = me.destroying,
             id, isOwnSprite;
 
         if (sprite) {
@@ -424,7 +424,7 @@ Ext.define('Ext.draw.Surface', {
             items = me.getItems(),
             item, i;
 
-        me.clearing = !!isDestroy;
+        me.destroying = !!isDestroy;
 
         for (i = items.length - 1; i >= 0; i--) {
             item = items[i];
@@ -436,15 +436,11 @@ Ext.define('Ext.draw.Surface', {
             }
         }
 
-        me.clearing = false;
+        me.destroying = false;
 
         items.length = 0;
         me.map = {};
         me.dirtyZIndex = true;
-
-        if (!me.destroying) {
-            me.setDirty(true);
-        }
     },
 
     /**
@@ -668,9 +664,7 @@ Ext.define('Ext.draw.Surface', {
     destroy: function () {
         var me = this;
 
-        me.destroying = true;
         me.removeAll(true);
-        me.destroying = false;
         me.predecessors = me.successors = null;
 
         me.callParent();

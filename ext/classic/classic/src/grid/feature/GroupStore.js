@@ -45,10 +45,13 @@ Ext.define('Ext.grid.feature.GroupStore', {
 
         if (store) {
             me.storeListeners = store.on({
-                datachanged: me.onDataChanged,
                 groupchange: me.onGroupChange,
+                remove: me.onRemove,
+                add: me.onAdd,
                 idchanged: me.onIdChanged,
                 update: me.onUpdate,
+                refresh: me.onRefresh,
+                clear: me.onClear,
                 scope: me,
                 destroyable: true
             });
@@ -374,8 +377,34 @@ Ext.define('Ext.grid.feature.GroupStore', {
         return this.store.indexOf(record);
     },
 
+    onAdd: function(store) {
+        var me = this;
+
+        me.processStore(me.store);
+        me.fireEvent('refresh', me);
+    },
+
+    onClear: function(store, records, startIndex) {
+        var me = this;
+
+        me.processStore(me.store);
+        me.fireEvent('clear', me);
+    },
+
     onIdChanged: function(store, rec, oldId, newId) {
         this.data.updateKey(rec, oldId);
+    },
+
+    onRefresh: function() {
+        this.processStore(this.store);
+        this.fireEvent('refresh', this);
+    },
+
+    onRemove: function() {
+        var me = this;
+
+        me.processStore(me.store);
+        me.fireEvent('refresh', me);
     },
 
     onUpdate: function(store, record, operation, modifiedFieldNames) {
@@ -396,7 +425,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
                 metaGroup = groupingFeature.getMetaGroup(record);
 
                 if (modifiedFieldNames && Ext.Array.contains(modifiedFieldNames, groupingFeature.getGroupField())) {
-                    return me.onDataChanged();
+                    return me.onRefresh(me.store);
                 }
 
                 // Fire an update event on the collapsed metaGroup placeholder record
@@ -448,11 +477,6 @@ Ext.define('Ext.grid.feature.GroupStore', {
             this.processStore(store);
         }
         this.fireEvent('groupchange', store, grouper);
-    },
-
-    onDataChanged: function() {
-        this.processStore(this.store);
-        this.fireEvent('refresh', this);
     },
 
     destroy: function() {

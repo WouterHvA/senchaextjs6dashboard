@@ -7,6 +7,12 @@
 
     <title>Luminizer</title>
 
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=geometry"></script>
+    <!-- if map is not visible use this with your own key: -->
+    <!--
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=keyhere"></script>
+    -->
+
     <script type="text/javascript">
         var Ext = Ext || {}; // Ext namespace won't be defined yet...
 
@@ -25,7 +31,7 @@
             if (s.match(/\bclassic\b/)) {
                 profile = 'classic';
             }
-            // else if (s.match(/\bmodern\b/)) {
+            //else if (s.match(/\bmodern\b/)) {
             //     profile = 'modern';
             // }
             // uncomment this if you have added native build profiles to your app.json

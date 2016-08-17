@@ -1,4 +1,4 @@
-describe("Ext.grid.filters.filter.Boolean", function() {
+describe('Ext.grid.filters.filter.Boolean', function() {
     var wasCalled = false,
         grid, store;
 
@@ -45,10 +45,10 @@ describe("Ext.grid.filters.filter.Boolean", function() {
         wasCalled = false;
     });
 
-    describe("initializing", function () {
-        describe("setting as active", function () {
-            describe("defined value", function () {
-                it("should set as active when value is `true`", function () {
+    describe('initializing', function () {
+        describe('setting as active', function () {
+            describe('defined value', function () {
+                it('should set as active when value is `true`', function () {
                     createGrid(null, {
                         columns: [
                             { header: 'Name',  dataIndex: 'name', width: 100 },
@@ -64,7 +64,7 @@ describe("Ext.grid.filters.filter.Boolean", function() {
                     expect(grid.columnManager.getHeaderByDataIndex('adult').filter.active).toBe(true);
                 });
 
-                it("should set as active when value is `false`", function () {
+                it('should set as active when value is `false`', function () {
                     createGrid(null, {
                         columns: [
                             { header: 'Name',  dataIndex: 'name', width: 100 },
@@ -80,7 +80,7 @@ describe("Ext.grid.filters.filter.Boolean", function() {
                     expect(grid.columnManager.getHeaderByDataIndex('adult').filter.active).toBe(true);
                 });
 
-                it("should set as active when value is `null`", function () {
+                it('should set as active when value is `null`', function () {
                     createGrid(null, {
                         columns: [
                             { header: 'Name',  dataIndex: 'name', width: 100 },
@@ -97,8 +97,8 @@ describe("Ext.grid.filters.filter.Boolean", function() {
                 });
             });
 
-            describe("undefined value", function () {
-                it("should not set as active when value is omitted", function () {
+            describe('undefined value', function () {
+                it('should not set as active when value is omitted', function () {
                     createGrid(null, {
                         columns: [
                             { header: 'Name',  dataIndex: 'name', width: 100 },
@@ -113,7 +113,7 @@ describe("Ext.grid.filters.filter.Boolean", function() {
                     expect(grid.columnManager.getHeaderByDataIndex('adult').filter.active).toBe(false);
                 });
 
-                it("should not set as active when value is `undefined`", function () {
+                it('should not set as active when value is `undefined`', function () {
                     createGrid(null, {
                         columns: [
                             { header: 'Name',  dataIndex: 'name', width: 100 },

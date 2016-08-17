@@ -1676,26 +1676,13 @@ Ext.define('Ext.grid.header.Container', {
         },
 
         onFocusableContainerMousedown: function(e, target) {
-            var targetCmp = Ext.Component.fromElement(target),
-                cols, i, len, scrollable, col;
+            var targetCmp = Ext.Component.fromElement(target);
 
             if (targetCmp === this) {
                 e.preventDefault();
             } else {
                 // The DDManager (Header Containers are draggable) prevents mousedown default
                 // So we must explicitly focus the header
-                if (targetCmp.isGroupHeader) {
-                    cols = targetCmp.getVisibleGridColumns();
-                    scrollable = this.getScrollable();
-
-                    for (i = 0, len = cols.length; i < len; ++i) {
-                        col = cols[i];
-                        if (scrollable.doIsInView(col.el, true).x) {
-                            targetCmp = col;
-                            break;
-                        }
-                    }
-                }
                 targetCmp.focus();
             }
         }

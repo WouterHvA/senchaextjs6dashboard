@@ -38,19 +38,5 @@
             <target name="-before-build"/>
             <target name="-after-build"/>
     -->
-    <target name="-after-resources">
-        <!--
-        Determine the location of the built version of the page and copy shared
-        resources to that location.
-        -->
-        <dirname property="shared.resources.dir"
-                 file="${app.output.base}/${app.output.page.path}"/>
-
-        <x-echo>Copying shared resources to ${shared.resources.dir}...</x-echo>
-
-        <copy todir="${shared.resources.dir}">
-            <fileset dir="${app.dir}" includes="resources/**/*"/>
-        </copy>
-    </target>
 
 </project>

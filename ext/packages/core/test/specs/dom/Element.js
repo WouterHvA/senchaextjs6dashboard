@@ -2223,23 +2223,6 @@ describe("Ext.dom.Element", function() {
             el.destroy();
         });
 
-        if (!Ext.isIE8) { // IE8 doesn't support SVG
-            it("should return false if SVGElement is in the DOM", function () {
-                var g = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
-                    el = Ext.getBody().appendChild(g);
-
-                expect(Ext.isGarbage(el.dom)).toBe(false);
-
-                el.destroy();
-            });
-
-            it("should return true if SVGElement is not in the DOM", function () {
-                var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-
-                expect(Ext.isGarbage(g)).toBe(true);
-            });
-        }
-
     });
 
     describe("shim", function() {

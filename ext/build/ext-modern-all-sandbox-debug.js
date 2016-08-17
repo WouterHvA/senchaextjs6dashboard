@@ -4,19 +4,21 @@ Ext.sandboxName = 'Ext6';
 Ext.isSandboxed = true;
 Ext.buildSettings = { baseCSSPrefix: "x6-", scopeResetCSS: true };
 /*
-This file is part of Ext JS 6.0.2.437
+This file is part of Ext JS 6.0.2.409
 
 Copyright (c) 2011-2016 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
-This version of Sencha Ext JS is licensed commercially for a limited period for evaluation 
-purposes only. Production use or use beyond the applicable evaluation period is prohibited 
-under this license.
+Pre-release code in the Ext repository is intended for development purposes only and will
+not always be stable. 
 
-If your trial has expired, please contact the sales department at http://www.sencha.com/contact.
+Use of pre-release code is permitted with your application at your own risk under standard
+Ext license terms. Public redistribution is prohibited.
 
-Version: 6.0.2.437 Build date: 2016-03-25 13:53:38 (4552fe90c6c396d8cdd24a3bc21561b7254db715)
+For early licensing, please contact us at licensing@sencha.com
+
+Version: 6.0.2.409 Build date: 2016-03-12 02:44:41 (84cc9899b433d6e91d1caaf6e8ecf400eb9f71ea)
 
 */
 // @tag core
@@ -6427,8 +6429,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '6.0.2.437');
-        Ext.setVersion('core', '6.0.2.437');
+        Ext.setVersion('ext', '6.0.2.409');
+        Ext.setVersion('core', '6.0.2.409');
     }
 })(Ext.manifest);
 
@@ -24976,10 +24978,7 @@ Ext.define('Ext.dom.Element', function(Element) {
         
         (!dom.parentNode || 
         
-        
-        
-        
-        (dom.offsetParent === null && 
+        (!dom.offsetParent && 
         
         
         
@@ -44109,7 +44108,21 @@ Ext.define('Ext.scroll.Scroller', {
     },
     
     isInView: function(el) {
-        return this.doIsInView(el);
+        var me = this,
+            result = {
+                x: false,
+                y: false
+            },
+            elRegion,
+            myEl = me.getElement(),
+            myElRegion;
+        if (el && (myEl.contains(el) || (me.component && me.component.owns(el)))) {
+            myElRegion = myEl.getRegion();
+            elRegion = Ext.fly(el).getRegion();
+            result.x = elRegion.right > myElRegion.left && elRegion.left < myElRegion.right;
+            result.y = elRegion.bottom > myElRegion.top && elRegion.top < myElRegion.bottom;
+        }
+        return result;
     },
     
     scrollTo: function(x, y, animate) {
@@ -44283,24 +44296,6 @@ Ext.define('Ext.scroll.Scroller', {
             if (shortfall > 0) {
                 sStyle.marginTop = Math.min(shortfall, this.maxSpacerMargin || 0) + 'px';
             }
-        },
-        doIsInView: function(el, skipCheck) {
-            var me = this,
-                c = me.component,
-                result = {
-                    x: false,
-                    y: false
-                },
-                elRegion,
-                myEl = me.getElement(),
-                myElRegion;
-            if (el && (skipCheck || (myEl.contains(el) || (c && c.owns(el))))) {
-                myElRegion = myEl.getRegion();
-                elRegion = Ext.fly(el).getRegion();
-                result.x = elRegion.right > myElRegion.left && elRegion.left < myElRegion.right;
-                result.y = elRegion.bottom > myElRegion.top && elRegion.top < myElRegion.bottom;
-            }
-            return result;
         },
         constrainScrollRange: function(scrollRange) {
             
@@ -44578,7 +44573,6 @@ Ext.define('Ext.scroll.Scroller', {
                     }, 50);
                     dom.scrollTop = me.trackingScrollTop;
                     dom.scrollLeft = me.trackingScrollLeft;
-                    me.trackingScrollLeft = me.trackingScrollTop = undefined;
                 }
             }
         }
@@ -83363,15 +83357,7 @@ Ext.define('Ext.picker.Slot', {
         this.on({
             scope: this,
             painted: 'onPainted',
-            itemtap: 'doItemTap',
-            resize: {
-                fn: 'onResize',
-                single: true
-            }
-        });
-        this.picker.on({
-            scope: this,
-            beforehiddenchange: 'onBeforeHiddenChange'
+            itemtap: 'doItemTap'
         });
         this.element.on({
             scope: this,
@@ -83388,19 +83374,6 @@ Ext.define('Ext.picker.Slot', {
         this.setupBar();
     },
     
-    onResize: function() {
-        var value = this.getValue();
-        if (value) {
-            this.doSetValue(value);
-        }
-    },
-    
-    onBeforeHiddenChange: function(picker, hidden) {
-        if (!hidden) {
-            this.doSetValue(this.getValue());
-        }
-    },
-    
     getPicker: function() {
         if (!this.picker) {
             this.picker = this.getParent();
@@ -83414,7 +83387,6 @@ Ext.define('Ext.picker.Slot', {
             return;
         }
         var element = this.element,
-            innerElement = this.innerElement,
             containerElement = this.container.element,
             picker = this.getPicker(),
             bar = picker.bar,
@@ -83430,13 +83402,13 @@ Ext.define('Ext.picker.Slot', {
         }
         padding = Math.ceil((element.getHeight() - titleHeight - barHeight) / 2);
         if (this.getVerticallyCenterItems()) {
-            innerElement.setStyle({
+            containerElement.setStyle({
                 padding: padding + 'px 0 ' + padding + 'px'
             });
         }
         scroller.refresh();
         scroller.setSlotSnapSize(barHeight);
-        this.doSetValue(value);
+        this.setValue(value);
     },
     
     doItemTap: function(list, index, item, e) {
@@ -83510,11 +83482,9 @@ Ext.define('Ext.picker.Slot', {
         var store = this.getStore(),
             viewItems = this.getViewItems(),
             valueField = this.getValueField(),
-            hasSelection = true,
             index, item;
         index = store.findExact(valueField, value);
         if (index == -1) {
-            hasSelection = false;
             index = 0;
         }
         item = Ext.get(viewItems[index]);
@@ -83523,10 +83493,7 @@ Ext.define('Ext.picker.Slot', {
             this.scrollToItem(item, (animated) ? {
                 duration: 100
             } : false);
-            if (hasSelection) {
-                
-                this.select(this.selectedIndex);
-            }
+            this.select(this.selectedIndex);
         }
         this._value = value;
     }
@@ -83582,7 +83549,7 @@ Ext.define('Ext.picker.Picker', {
             clsPrefix = Ext.baseCSSPrefix,
             innerElement = this.innerElement;
         
-        this.mask = innerElement.insertFirst({
+        this.mask = innerElement.createChild({
             cls: clsPrefix + 'picker-mask'
         });
         this.bar = this.mask.createChild({
@@ -84827,16 +84794,6 @@ Ext.define('Ext.field.Select', {
         }
     },
     
-    scrollToSelection: function() {
-        var me = this,
-            picker = me.getTabletPicker(),
-            list = picker.down('list'),
-            selection = me.getSelection();
-        if (selection && list.listItems.length) {
-            list.scrollToRecord(selection);
-        }
-    },
-    
     getPhonePicker: function() {
         var me = this,
             phonePicker = me.phonePicker,
@@ -84878,14 +84835,6 @@ Ext.define('Ext.field.Select', {
                 hideOnMaskTap: true,
                 width: Ext.os.is.Phone ? '14em' : '18em',
                 height: (Ext.os.is.BlackBerry && Ext.os.version.getMajor() === 10) ? '12em' : (Ext.os.is.Phone ? '12.5em' : '22em'),
-                listeners: {
-                    resize: {
-                        fn: 'onTabletPickerResize',
-                        single: true
-                    },
-                    hiddenchange: 'onTabletPickerHiddenChange',
-                    scope: me
-                },
                 items: {
                     xtype: 'list',
                     store: me.getStore(),
@@ -84946,16 +84895,6 @@ Ext.define('Ext.field.Select', {
         var me = this;
         if (record) {
             me.setValue(record);
-        }
-    },
-    
-    onTabletPickerResize: function() {
-        this.scrollToSelection();
-    },
-    
-    onTabletPickerHiddenChange: function(picker, hidden) {
-        if (!hidden) {
-            this.scrollToSelection();
         }
     },
     onListTap: function() {

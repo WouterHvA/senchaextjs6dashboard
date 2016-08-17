@@ -5606,12 +5606,9 @@ Ext.define('Ext.dom.Element', function(Element) {
             // if the element does not have a parent node, it is definitely not in the
             // DOM - we can exit immediately
             (!dom.parentNode ||
-            // If the element has an offsetParent we can bail right away, it is
-            // definitely in the DOM. If offsetParent is null, the element is detached.
-            // If offsetParent is undefined, the element doesn't support offsetParent
-            // (e.g. SVGElement) and is not necessarily garbage; parentNode check above
-            // should be sufficient in this case.
-            (dom.offsetParent === null &&
+            // If the element has an offset parent we can bail right away, it is
+            // definitely in the DOM.
+            (!dom.offsetParent &&
             // if the element does not have an offsetParent it can mean the element is
             // either not in the dom or it is hidden.  The next step is to check to see
             // if it can be found by id using either document.all or getElementById(),

@@ -3578,16 +3578,6 @@ Ext.define('Ext.view.Table', {
                     // Ext.grid.NavigationModel#onFocusMove will NOT react and navigate because the actionableMode
                     // flag is still set at this point.
                     position.getCell().focus();
-
-                    // Let's update the activeEl after focus here
-                    activeEl = Ext.fly(Ext.Element.getActiveElement());
-                    // If that focus triggered handlers (eg CellEditor after edit handlers) which
-                    // programatically moved focus somewhere, and the target cell has been unfocused, defer to that,
-                    // null out position, so that we do not navigate to that cell below.
-                    // See EXTJS-20395
-                    if (!(me.el.contains(activeEl) && activeEl.is(me.getCellSelector()))) {
-                        position = null;
-                    }
                 }
 
                 // We are exiting actionable mode.

@@ -1373,23 +1373,4 @@ describe("Ext.menu.Menu", function() {
             }).not.toThrow();
         });
     });
-    
-    describe('document scrolling', function() {
-        it('should not hide when the document scrolls', function() {
-            var stretcher = Ext.getBody().createChild({
-                style: 'position:absolute;height:1px;width:1px;top:10000px'
-            });
-
-            makeMenu();
-            menu.show();
-            Ext.scroll.Scroller.getScrollingElement().scrollTop = 10000;
-
-            // We must wait for a possibly asynchronous scroll event to happen.
-            waits(100);
-            runs(function() {
-                expect(menu.isVisible()).toBe(true);
-                stretcher.destroy();
-            });
-        });
-    });
 });

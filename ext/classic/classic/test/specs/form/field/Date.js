@@ -1,16 +1,6 @@
 describe("Ext.form.field.Date", function() {
     var component, makeComponent;
     
-    function spyOnEvent(object, eventName, fn) {
-        var obj = {
-            fn: fn || Ext.emptyFn
-        },
-        spy = spyOn(obj, 'fn');
-
-        object.addListener(eventName, obj.fn);
-        return spy;
-    }
-
     function clickTrigger() {
         var trigger = component.getTrigger('picker').getEl(),
             xy = trigger.getXY();
@@ -354,14 +344,6 @@ describe("Ext.form.field.Date", function() {
                 });
                 component.setValue('03.03.2000');
                 expect(component.getValue()).toBeNull();    
-            });
-
-            it("should fire the change event", function() {
-                makeComponent();
-                var spy = spyOnEvent(component, 'change').andCallThrough();
-                component.setValue(new Date(2010, 10, 6)); // 5th nov 2010
-                expect(spy.callCount).toBe(1);
-                expect(spy.mostRecentCall.args[1]).toEqual(new Date(2010, 10, 6));
             });
             
         });
